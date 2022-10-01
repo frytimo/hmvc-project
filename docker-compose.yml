@@ -1,0 +1,62 @@
+# export XDEBUG_CONFIG="client_host=192.168.2.219"
+version: '3'
+
+services:
+
+  php:
+    build: ./php
+    container_name: php-hmvc-fusionpbx
+    hostname: php
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://nginx/status/fpm"]
+    image: php-hmvc-fusionpbx
+    restart: unless-stopped
+    volumes:
+      - ./fusionpbx:/www/fusionpbx
+      - ./php/socket:/var/run/php
+      - ./php/config:/etc/php81:ro
+      - ./php/config-cli:/usr/local/etc/php
+      - ./php/supervisord.conf:/etc/supervisord.conf:ro
+
+  web:
+    build: ./nginx
+    container_name: nginx-hmvc-fusionpbx
+    hostname: nginx
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/status/nginx"]
+    image: nginx-hmvc-fusionpbx
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    volumes:
+      - ./fusionpbx:/www
+      - ./nginx/config:/etc/nginx:ro
+      - ./php/socket:/var/run/php
+    depends_on:
+      - php
+      - db
+      - cache
+
+  db:
+    #build: ./postgres
+    container_name: postgres-hmvc-fusionpbx
+    hostname: postgres
+    image: postgres-laravel
+    environment:
+      POSTGRES_DB: fusionpbx
+      POSTGRES_USER: fusionpbx
+      POSTGRES_PASSWORD: fusionpbx
+    restart: unless-stopped
+    #user: "tim:tim"
+    ports:
+        - 5432:5432
+    volumes:
+      - ./postgres/db:/var/lib/postgresql/data
+
+  cache:
+    container_name: redis-hmvc-fusionpbx
+    hostname: redis
+    image: redis:alpine
+    restart: unless-stopped
