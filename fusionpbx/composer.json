@@ -1,7 +1,8 @@
 {
     "autoload": {
         "psr-4": {
-            "fusionpbx\\": "./"
+            "fusionpbx\\core\\": "core/",
+            "fusionpbx\\pub\\": "pub/"
         }
     },
     "require": {}
