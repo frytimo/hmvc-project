@@ -35,7 +35,7 @@
 	error_reporting(E_ALL);
 
 	$dirname = dirname(__DIR__);
-	$auto_loader = $dirname.'/vendor/autoloader.php';
+	$auto_loader = $dirname.'/vendor/autoload.php';
 	include $auto_loader;
 	
 
