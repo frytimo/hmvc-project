@@ -26,36 +26,37 @@
 	  Tim Fry <tim@voipstratus.com>
 	 */
 
-	namespace fusionpbx\core\db;
+	namespace fusionpbx\core\db\driver;
+
+	use fusionpbx\core\db\driver\database_interface;
 
 	/**
 	 * Description of postgresql
 	 *
 	 * @author Tim Fry <tim@voipstratus.com>
 	 */
-	class postgres extends database {
+	class pgsql implements database_interface {
 
 		public function __construct() {
 //
 		}
 
-		public function get_connection() {
-
-		}
-		
-		public function connect(){
-			$host = $_ENV['db'][0]['host'];
-			$port = $_ENV['db'][0]['port'];
-			$name = $_ENV['db'][0]['name'];
-			$user = $_ENV['db'][0]['user'];
-			$pass = $_ENV['db'][0]['password'];
-			$dsn = "pgsql:host=$host port=$post dbname=$name user=$user password=$password";
-			$this->connection = new PDO($dsn);
-			$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		public function connect(string $host, int $port, string $dbname, string $user, string $pass) {
+			$dsn = "pgsql:host=$host port=$port dbname=$dbname user=$user password=$pass";
+			$this->connection = new \PDO($dsn);
+			$this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 		}
 
-		public function select(){
+		public function list_tables(): array {
 
+		}
+
+		public function list_column_names(string $table_name): array {
+
+		}
+
+		public function is_connected(): bool {
+			
 		}
 
 	}

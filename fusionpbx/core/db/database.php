@@ -27,29 +27,39 @@
 	 */
 
 	namespace fusionpbx\core\db;
+	use fusionpbx\core\db\driver\database_interface;
 
 	/**
 	 * Description of database
 	 *
 	 * @author Tim Fry <tim@voipstratus.com>
 	 */
-	abstract class database {
+	class database {
 		/**
 		 * Connection to the database
 		 * @var PDO
 		 */
-		protected $connection;
+		private $driver;
 
-		abstract public function get_connection();
-		abstract public function connect();
-		abstract public function select();
+		public function __construct(database_interface $driver) {
+			$this->driver = $driver;
+		}
+
+		public function connect(string $host, int $port, string $dbname, string $user, string $pass) {
+			$this->driver->connect($host, $port, $dbname, $user, $pass);
+		}
 
 		public static function new(int $index): database {
 			$type = $_ENV['db'][$index]['type'];
-//			$current_dir = __DIR__;
-//			include($type. '.php');
-			$database = new $type();
-			$database->connect();
+			$host = $_ENV['db'][0]['host'];
+			$port = $_ENV['db'][0]['port'];
+			$name = $_ENV['db'][0]['name'];
+			$user = $_ENV['db'][0]['user'];
+			$pass = $_ENV['db'][0]['password'];
+			$driver = 'fusionpbx\\core\\db\\driver\\'.$type;
+			$database = new database(new $driver());
+			$database->connect($host, $port, $name, $user, $pass);
 			return $database;
 		}
+
 	}

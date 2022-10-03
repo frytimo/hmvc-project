@@ -43,9 +43,7 @@
 	env_loader::load_env_file($dirname);
 	env_loader::set_env();
 
-	$pgsql = new \fusionpbx\core\db\postgres();
+//	$pgsql = new \fusionpbx\core\db\postgres();
 	$database = database::new(0);
-	$database->connect();
-	echo "";
-
 	
+	echo "";
