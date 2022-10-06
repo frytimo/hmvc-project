@@ -43,7 +43,7 @@ services:
     #build: ./postgres
     container_name: postgres-hmvc-fusionpbx
     hostname: postgres
-    image: postgres-laravel
+    image: postgres:11
     environment:
       POSTGRES_DB: fusionpbx
       POSTGRES_USER: fusionpbx
