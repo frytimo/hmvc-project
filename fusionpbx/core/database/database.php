@@ -27,7 +27,7 @@
 			$type = $_ENV['db'][$index]['type'];
 			$host = $_ENV['db'][0]['host'];
 			$port = $_ENV['db'][0]['port'];
-			$name = $_ENV['db'][0]['name'];
+			$name = $_ENV['db'][0]['database'];
 			$user = $_ENV['db'][0]['user'];
 			$pass = $_ENV['db'][0]['password'];
 			$driver = 'fusionpbx\\core\\database\\driver\\'.$type;
